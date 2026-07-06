@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏦 Mini Pawn Broker Module (Bankining)
 
-## Getting Started
+Welcome to the **Mini Pawn Broker Module**! This is a modern, high-performance web application designed to help pawn brokers manage loans, track payments, and maintain automated ledger entries seamlessly.
 
-First, run the development server:
+**Live Demo**: [https://bankining-319l.vercel.app/](https://bankining-319l.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Dashboard & Search**: A vibrant, modern dashboard with a beautiful mesh-gradient background. Includes a powerful search bar to find loans instantly by ID or Customer Name.
+- **Advanced Filtering**: Filter loans by Category (Jewelry, Electronics, Vehicles, etc.) or sort them by Date and Amount (High to Low, Low to High).
+- **Loan Origination**: Create new loans with detailed parameters (Interest Rate, Gross/Net Weight, Estimated Value).
+- **Payment Processing**: Record partial or full payments. The system automatically calculates interest versus principal allocation.
+- **Automated Ledger**: Every loan disbursement and payment automatically generates dual-entry ledger records to track cash flow perfectly.
+- **Professional IDs**: Clean, professional loan IDs (e.g., `ID: 0001`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠 Tech Stack & Architecture
 
-To learn more about Next.js, take a look at the following resources:
+This application was built using cutting-edge, production-ready technologies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Frontend**: [Next.js 16](https://nextjs.org/) (App Router) + React
+- **Styling**: Vanilla CSS with modern aesthetics, glassmorphism, and dynamic animations.
+- **Backend/API**: Next.js Server Actions (SSR)
+- **Database**: [Supabase](https://supabase.com/) PostgreSQL (Serverless connection pooler)
+- **ORM**: [Prisma 7](https://www.prisma.io/) with the native Node.js Postgres driver (`pg` + `@prisma/adapter-pg`)
+- **Hosting**: [Vercel](https://vercel.com/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🗄 Database Schema
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The database utilizes three core models:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Loan**: Tracks the customer, principal amount, interest rate, pledged item details (weights and category), and real-time remaining balance.
+2. **Payment**: Records every individual payment made against a loan, breaking it down into Principal Paid and Interest Paid.
+3. **LedgerEntry**: A double-entry accounting log that records debits and credits for Cash/Bank Accounts, Loan Accounts, and Interest Income.
+
+---
+
+## 🚀 Running Locally
+
+To run this project on your local machine:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/nikki-nooka/-Mini-Pawn-Broker-Module.git
+   cd -Mini-Pawn-Broker-Module
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add your Supabase credentials:
+   ```env
+   POSTGRES_PRISMA_URL="postgres://[USER]:[PASSWORD]@[HOST]:6543/postgres?pgbouncer=true"
+   POSTGRES_URL_NON_POOLING="postgres://[USER]:[PASSWORD]@[HOST]:5432/postgres"
+   ```
+
+4. **Sync the Database Schema:**
+   *(Use the direct connection to bypass the pooler when pushing the schema)*
+   ```bash
+   POSTGRES_PRISMA_URL=$POSTGRES_URL_NON_POOLING npx prisma db push --accept-data-loss
+   ```
+
+5. **Start the Development Server:**
+   ```bash
+   npm run dev
+   ```
+   Open `http://localhost:3000` to view the app!
+
+---
+
+## 📦 Deployment (Vercel)
+
+This app is optimized for serverless deployment on Vercel. 
+- The `build` script in `package.json` intentionally skips `prisma db push` because Supabase's connection pooler does not support schema modifications during automated builds. 
+- Ensure your Vercel Environment Variables are set specifically for the **Production** environment before deploying!
+
+---
+
+*Built for excellence in modern pawn broker management.*
