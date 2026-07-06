@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Loan {
+  id                 Int       @id @default(autoincrement())
+  customerName       String
+  loanDate           DateTime
+  loanAmount         Float
+  interestRatePerMonth Float
+  pledgedItemName    String
+  itemCategory       String    @default("Jewelry")
+  grossWeight        Float?
+  stoneWeight        Float?
+  netWeight          Float?
+  estimatedItemValue Float
+  paymentMode        String
+  status             String    @default("ACTIVE")
+  payments           Payment[]
+  createdAt          DateTime  @default(now())
+}
+
+model Payment {
+  id             Int      @id @default(autoincrement())
+  loanId         Int
+  loan           Loan     @relation(fields: [loanId], references: [id])
+  paymentDate    DateTime
+  amount         Float
+  principalPaid  Float
+  interestPaid   Float
+  paymentMode    String
+  createdAt      DateTime @default(now())
+}
+
+model LedgerEntry {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  voucherNo   String
+  account     String
+  debit       Float    @default(0)
+  credit      Float    @default(0)
+  description String?
+}
