@@ -84,7 +84,7 @@ export async function createLoan(formData: FormData) {
       });
 
       return newLoan;
-    });
+    }, { maxWait: 10000, timeout: 20000 });
 
     revalidatePath('/');
     return { success: true, loanId: loan.id };
@@ -214,7 +214,7 @@ export async function receivePayment(loanId: number, formData: FormData) {
       }
 
       return payment;
-    });
+    }, { maxWait: 10000, timeout: 20000 });
 
     revalidatePath(`/loans/${loanId}`);
     return { success: true, paymentId: result.id };
